@@ -1723,6 +1723,16 @@ p {
   color: var(--c-text-2);
 }
 
+.results-key {
+  max-width: 820px;
+  margin-top: 28px;
+  padding: 2px 0 2px 16px;
+  border-left: 2px solid var(--c-brass);
+  font-size: var(--fs-lede);
+  line-height: 1.6;
+  color: var(--c-text);
+}
+
 .results-head {
   display: flex;
   align-items: flex-end;

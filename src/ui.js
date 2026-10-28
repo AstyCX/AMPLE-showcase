@@ -666,11 +666,27 @@ export function renderResults(root, stand) {
   }
   draw();
   root.append(
+    finding(stand, t) || '',
     h('div', { class: 'results-head' },
       h('p', { class: 'results-lower' }, icon('down', 'icon'), t.lowerIsBetter),
       h('div', { class: 'field results-stat' }, h('span', { class: 'label' }, t.statLabel), toggle.el)),
     h('div', { class: 'table-wrap' }, table),
   );
+}
+
+function finding(stand, t) {
+  const row = stand.panel?.esr_median;
+  if (!row?.scratch || !row.card || !row.finetune || stand.ns.length < 2) return null;
+  const ratios = (i) => [row.scratch[i] / row.card[i], row.scratch[i] / row.finetune[i]];
+  const span = (idx) => {
+    const r = idx.flatMap(ratios);
+    return [Math.floor(Math.min(...r)), Math.round(Math.max(...r))];
+  };
+  const small = stand.ns.slice(0, -1);
+  const [smallLo, smallHi] = span(small.map((_, i) => i));
+  const [lastLo, lastHi] = span([stand.ns.length - 1]);
+  return h('p', { class: 'results-key' }, t.finding({
+    small: `N = ${small.join(' and ')}`, smallLo, smallHi, last: stand.ns[stand.ns.length - 1], lastLo, lastHi }));
 }
 
 export function announce(live, text) {

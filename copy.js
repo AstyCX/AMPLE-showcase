@@ -23,7 +23,8 @@ export const COPY = {
     title: 'How it works',
     lede:
       'A 21k-parameter neural network learns an amp it has never heard from 1–10 measured knob settings — through ' +
-      'a characteristics card of 8 numbers for each specific amp.',
+      'a characteristics card of 8 numbers for each specific amp. The research goal is to need as few measurements ' +
+      'of a new amp as possible, by reusing what the network learned on other amps.',
     steps: [
       {
         title: 'Pretrain on 100 amps',
@@ -57,6 +58,9 @@ export const COPY = {
     methodColumn: 'Method',
     nColumn: (n) => `N = ${n}`,
     caption: (stat, note) => `${stat} ESR by method and number of measured settings N. ${note}`,
+    finding: ({ small, smallLo, smallHi, last, lastLo, lastHi }) =>
+      `Main result: with ${small} the card and fine-tuning have a ${smallLo}–${smallHi}× lower error than the same ` +
+      `network trained from scratch; with N = ${last} it is still ${lastLo}–${lastHi}×.`,
     lowerIsBetter: 'Lower ESR is better.',
     stats: {
       esr_median: {

@@ -89,22 +89,21 @@ export const COPY = {
   limits: {
     title: 'Limits',
     items: [
-      'All test amps are Guitarix heads: their tube or tonestack is unseen, but the simulator family is the same as ' +
-        'for the 100 training amps.',
-      'On other amp-plugin families the card does not transfer, and the pretrained base is not reliably better than ' +
-        'training from scratch. Cross-family transfer is the open problem.',
-      'The ESR next to the sound is measured on the played take; the table uses the standard 190 s test DI. The ' +
-        'method ranking is the same on both, but two short takes are not a full test on new guitar recordings.',
-      'The table is from one base run and one from-scratch run per cell. A second base seed gives a similar card ' +
-        'error: mean ESR 0.038 / 0.036 / 0.035 vs 0.045 / 0.034 / 0.034 at N = 1 / 3 / 10.',
-      'No formal blind listening test yet, so no claim that the model is indistinguishable by ear.',
-      'Audio is the amp head without a speaker cabinet; Cab sim is a listening aid applied equally to every source.',
+      'All amplifiers the model is trained on are from the Guitarix family. As of today, the network is unable to ' +
+        'reliably simulate an unseen amp family and is not reliably better than training from scratch. Therefore the ' +
+        'current goal is to solve the multi-family model transfer.',
+      'Only one seed for the base & one more to test the reliability. More seeds to be tested in the future.',
+      'No blind human test conducted yet.',
+      'Amp sim is just a head without a cabinet (on this page, an optional cab filter can be switched on to simulate ' +
+        'the cabinet effect).',
     ],
   },
 
   footer: {
     tagline: 'research preview, 2026',
-    author: 'By Danila Miadzvedz · <a href="https://github.com/AstyCX">GitHub</a>',
+    author:
+      'By Danila Miadzvedz · <a href="https://github.com/AstyCX">GitHub</a> · ' +
+      '<a href="https://www.linkedin.com/in/danila-miadzvedz/">LinkedIn</a>',
     credits: {
       amps:
         'Amp sounds: <a href="https://guitarix.org">Guitarix</a> GxAmplifier-X (GPL), rendered offline; no Guitarix ' +

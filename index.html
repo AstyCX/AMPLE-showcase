@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AMPLE — an unseen amp from 8 numbers</title>
+  <meta name="description" content="A 21k-parameter network learns a guitar amp it has never heard from 1–10 measured knob settings, through a card of 8 numbers. Turn the knobs of a 3D amp, compare the real amp with the model, or take the blind test.">
+  <meta name="theme-color" content="#0c110f">
+  <meta name="color-scheme" content="dark">
+  <meta name="author" content="Danila Miadzvedz">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://astycx.github.io/AMPLE-showcase/">
+  <meta property="og:title" content="AMPLE — an unseen amp from 8 numbers">
+  <meta property="og:description" content="A 21k-parameter network learns an amp it has never heard from 1–10 measured knob settings — through a card of 8 numbers. Listen: real amp vs model, and a blind test.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://astycx.github.io/AMPLE-showcase/preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="AMPLE: a 3D guitar amp head with brass knobs and a fern sprig on the grille.">
+  <meta name="twitter:image" content="https://astycx.github.io/AMPLE-showcase/preview.png">
+  <meta name="twitter:title" content="AMPLE — an unseen amp from 8 numbers">
+  <meta name="twitter:description" content="A 21k-parameter network learns an amp it has never heard from 1–10 measured knob settings — through a card of 8 numbers.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c100e'/%3E%3Cg transform='translate(9 51) rotate(-40) scale(54)' fill='none' stroke='%23e8cc93' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M0 0C.25 .26 .7 .24 1 0C.7 -.2 .25 -.24 0 0Z' stroke-width='.055'/%3E%3Cpath d='M.06 0H.9' stroke-width='.035'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  } }
+  </script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5C4.5 10.5 10 4.8 19.5 4.5c-.3 9.5-6 15-15 15Z"/><path d="M4.5 19.5 14 10"/></symbol>
+  <symbol id="i-sprig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20C9 15 13 10 19 4"/><path d="M8.6 15.6c-2.6-.3-4-2-4.2-4.6 2.6.2 4 1.8 4.2 4.6Z"/><path d="M11.4 12.2c.4-2.6 2.2-4 4.8-4-.3 2.6-2 4-4.8 4Z"/><path d="M14.2 8.8c-1.4-2.1-1.1-4.2.6-6 1.3 2.1 1.1 4.2-.6 6Z"/></symbol>
+  <symbol id="i-fern" viewBox="0 0 140 420" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M70 410C62 300 86 140 78 12"></path><path d="M68.7 382.7Q48.3 355.0 13.9 353.6Q34.3 381.3 68.7 382.7M68.7 382.7Q103.0 381.3 123.4 353.6Q89.1 355.0 68.7 382.7M68.3 356.8Q49.1 330.7 16.8 329.4Q36.0 355.5 68.3 356.8M68.3 356.8Q100.7 355.5 119.9 329.4Q87.6 330.7 68.3 356.8M68.7 329.7Q50.7 305.3 20.3 304.0Q38.4 328.5 68.7 329.7M68.7 329.7Q99.1 328.5 117.1 304.0Q86.7 305.3 68.7 329.7M69.6 301.7Q52.8 278.9 24.5 277.7Q41.3 300.5 69.6 301.7M69.6 301.7Q97.9 300.5 114.7 277.7Q86.4 278.9 69.6 301.7M71.0 272.9Q55.4 251.7 29.2 250.7Q44.7 271.8 71.0 272.9M71.0 272.9Q97.2 271.8 112.7 250.7Q86.5 251.7 71.0 272.9M72.5 243.4Q58.2 224.0 34.1 223.0Q48.4 242.4 72.5 243.4M72.5 243.4Q96.7 242.4 111.0 223.0Q86.8 224.0 72.5 243.4M74.2 213.6Q61.2 195.9 39.2 195.0Q52.3 212.7 74.2 213.6M74.2 213.6Q96.2 212.7 109.2 195.0Q87.3 195.9 74.2 213.6M75.9 183.4Q64.2 167.5 44.4 166.7Q56.2 182.6 75.9 183.4M75.9 183.4Q95.7 182.6 107.4 166.7Q87.6 167.5 75.9 183.4M77.4 153.2Q67.1 139.1 49.6 138.4Q60.0 152.5 77.4 153.2M77.4 153.2Q94.9 152.5 105.3 138.4Q87.8 139.1 77.4 153.2M78.7 123.2Q69.7 110.9 54.5 110.3Q63.5 122.5 78.7 123.2M78.7 123.2Q93.8 122.5 102.8 110.3Q87.7 110.9 78.7 123.2M79.4 93.4Q71.9 83.1 59.2 82.6Q66.7 92.8 79.4 93.4M79.4 93.4Q92.2 92.8 99.7 82.6Q87.0 83.1 79.4 93.4M79.6 64.0Q73.6 55.8 63.4 55.4Q69.5 63.6 79.6 64.0M79.6 64.0Q89.8 63.6 95.8 55.4Q85.7 55.8 79.6 64.0M79.1 35.4Q74.7 29.4 67.4 29.1Q71.7 35.1 79.1 35.4M79.1 35.4Q86.5 35.1 90.9 29.1Q83.5 29.4 79.1 35.4"></path></symbol>
+</svg>
+<div id="app" class="app am">
+  <a class="skip-link" href="#listen" data-copy="hero.skip"></a>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-main">
+        <header class="topbar">
+          <div class="logo">
+            <svg class="logo__mark" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-leaf"/></svg>
+            <span class="logo__word" data-name>AMPLE</span>
+            <span class="pill" data-copy="hero.pill"></span>
+          </div>
+          <nav class="nav" data-copy-aria="nav.label">
+            <a href="#how" data-copy="nav.how"></a><span class="nav__sep" aria-hidden="true"></span><a href="#results" data-copy="nav.results"></a><span class="nav__sep" aria-hidden="true"></span><a href="#limits" data-copy="nav.limits"></a>
+          </nav>
+        </header>
+        <h1 id="hero-title" class="hero-title" data-ui="title">Amplifier Modeling from Prior-Learned Embeddings</h1>
+
+        <div class="stage" data-ui="stage">
+          <svg class="stage__fern stage__fern--l" viewBox="0 0 140 420" aria-hidden="true"><use href="#i-fern"/></svg>
+          <div class="stage-canvas" data-ui="stage-canvas" role="img" data-copy-aria="hero.stageLabel"></div>
+          <span class="stage__chip" data-ui="stage-chip" hidden></span>
+          <div class="stage-veil" aria-hidden="true"><span class="veil-ring"></span></div>
+        </div>
+
+        <div class="pick-slot" data-ui="pick-slot"></div>
+
+        <div class="knobs-head">
+          <div class="knobs-head__l"><span class="label" data-copy="knobs.title"></span><span class="caption knobs-hint" data-copy="knobs.snapHint"></span></div>
+          <div class="legend" data-ui="legend" aria-hidden="true"></div>
+        </div>
+        <div class="twins" data-ui="twins" role="group" data-copy-aria="knobs.group"></div>
+      </div>
+
+      <aside class="panel card" id="listen" data-ui="card" data-copy-aria="card.title" tabindex="-1"></aside>
+
+      <div class="console transport" data-ui="transport" role="group" data-copy-aria="transport.group"></div>
+    </section>
+
+    <section class="section how" id="how" aria-labelledby="how-title">
+      <svg class="fern section__fern" viewBox="0 0 140 420" aria-hidden="true"><use href="#i-fern"/></svg>
+      <h2 id="how-title" class="h2"><svg class="h2__sprig" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sprig"/></svg><span data-copy="how.title"></span></h2>
+      <p class="lede how__lede" data-copy="how.lede"></p>
+      <ol class="steps">
+        <li class="step">
+          <div class="step__top">
+            <span class="step__n" aria-hidden="true">1</span>
+            <svg class="step__art" viewBox="0 0 100 40" width="100" height="40" aria-hidden="true"><defs><pattern id="hw-amps" width="10" height="4" patternUnits="userSpaceOnUse"><circle cx="5" cy="2" r="1.4" fill="#6a5329"/></pattern></defs><rect width="100" height="40" fill="url(#hw-amps)"/></svg>
+          </div>
+          <h3 class="step__t" data-copy="how.steps.0.title"></h3>
+          <p class="step__p" data-copy="how.steps.0.text"></p>
+        </li>
+        <li class="step">
+          <div class="step__top">
+            <span class="step__n" aria-hidden="true">2</span>
+            <svg class="step__art" viewBox="0 0 128 12" width="128" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4" fill="#a8823f"/><g fill="none" stroke="#6a5329" stroke-width="1.2"><circle cx="19" cy="6" r="4"/><circle cx="32" cy="6" r="4"/><circle cx="45" cy="6" r="4"/><circle cx="58" cy="6" r="4"/><circle cx="71" cy="6" r="4"/><circle cx="84" cy="6" r="4"/><circle cx="97" cy="6" r="4"/><circle cx="110" cy="6" r="4"/><circle cx="123" cy="6" r="4"/></g></svg>
+          </div>
+          <h3 class="step__t" data-copy="how.steps.1.title"></h3>
+          <p class="step__p" data-copy="how.steps.1.text"></p>
+        </li>
+        <li class="step">
+          <div class="step__top">
+            <span class="step__n" aria-hidden="true">3</span>
+            <svg class="step__art" viewBox="0 0 136 22" width="136" height="22" aria-hidden="true"><g fill="#1c1a12" stroke="#a8823f" stroke-width="1"><rect x="0.5" y="0.5" width="15" height="21" rx="3"/><rect x="17.5" y="0.5" width="15" height="21" rx="3"/><rect x="34.5" y="0.5" width="15" height="21" rx="3"/><rect x="51.5" y="0.5" width="15" height="21" rx="3"/><rect x="68.5" y="0.5" width="15" height="21" rx="3"/><rect x="85.5" y="0.5" width="15" height="21" rx="3"/><rect x="102.5" y="0.5" width="15" height="21" rx="3"/><rect x="119.5" y="0.5" width="15" height="21" rx="3"/></g></svg>
+          </div>
+          <h3 class="step__t" data-copy="how.steps.2.title"></h3>
+          <p class="step__p" data-copy="how.steps.2.text"></p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section results-section" id="results" aria-labelledby="results-title">
+      <h2 id="results-title" class="h2"><svg class="h2__sprig" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sprig"/></svg><span data-copy="results.title"></span></h2>
+      <p class="lede" data-copy="results.lede"></p>
+      <div data-ui="results"></div>
+      <p class="caption about" data-ui="about"></p>
+    </section>
+
+    <section class="section limits-section" id="limits" aria-labelledby="limits-title">
+      <h2 id="limits-title" class="h2"><svg class="h2__sprig" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sprig"/></svg><span data-copy="limits.title"></span></h2>
+      <ul class="limits" data-copy-list="limits.items" data-copy-icon="limits__leaf"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <svg class="fern footer__fern" viewBox="0 0 140 420" aria-hidden="true"><use href="#i-fern"/></svg>
+    <div class="footer__brand"><span class="logo__word" data-name>AMPLE</span><span class="caption"><span data-name-long>Amplifier Modeling from Prior-Learned Embeddings</span> · <span data-copy="footer.tagline"></span></span></div>
+    <p class="footer__author caption" data-copy="footer.author"></p>
+    <div class="foot">
+      <p data-copy="footer.credits.amps"></p>
+      <p data-ui="di-credit" data-copy="footer.credits.guitarStatic"></p>
+      <p data-copy="footer.credits.trainingDi"></p>
+      <p data-copy="footer.credits.tech"></p>
+    </div>
+  </footer>
+
+  <div class="dock" data-ui="dock" role="group" data-copy-aria="dock.group"></div>
+  <div class="sr-only" data-ui="live" aria-live="polite" aria-atomic="true"></div>
+  <noscript><p class="noscript">The listening stand needs JavaScript.</p></noscript>
+</div>
+
+<script type="module">
+  import { start } from './src/main.js';
+
+  const hasGL = (() => {
+    try {
+      return Boolean(document.createElement('canvas').getContext('webgl2'));
+    } catch {
+      return false;
+    }
+  })();
+  const sceneModule = hasGL ? import('./src/amp/scene.js') : null;
+  const audioModule = import('./src/audio.js');
+  sceneModule?.catch(() => {});
+  audioModule.catch(() => {});
+
+  start({
+    root: document.getElementById('app'),
+    createAmpScene: sceneModule && (async (opts) => (await sceneModule).createAmpScene(opts)),
+    createAudioEngine: async (opts) => (await audioModule).createAudioEngine(opts),
+  });
+</script>
+</body>
+</html>
